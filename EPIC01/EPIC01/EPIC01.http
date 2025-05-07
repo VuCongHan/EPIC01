@@ -1,0 +1,6 @@
+@EPIC01_HostAddress = http://localhost:5111
+
+GET {{EPIC01_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
