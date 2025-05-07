@@ -317,12 +317,19 @@ namespace EPIC01.Controllers
             if (!System.IO.File.Exists(pdfPath))
                 throw new FileNotFoundException("Không tìm thấy tệp PDF: " + pdfPath);
 
-            string tessDataPath = @"C:\Users\vuhan\Desktop\Nghien cuu thuc tap\EPIC001\EPIC01\EPIC01\Uploads\tessdata";
+            // Lấy thư mục gốc của ứng dụng đang chạy (relative path)
+            var baseDirectory = AppContext.BaseDirectory;
+
+            // Thư mục tessdata nằm trong thư mục "Uploads/tessdata" của dự án
+            string tessDataPath = Path.Combine(baseDirectory, "Uploads", "tessdata");
             if (!Directory.Exists(tessDataPath))
                 throw new DirectoryNotFoundException("Không tìm thấy thư mục tessdata: " + tessDataPath);
 
-            // Nạp từ điển tiếng Việt
-            var dictionaryPath = @"C:\Users\vuhan\Desktop\Nghien cuu thuc tap\EPIC001\EPIC01\EPIC01\Uploads\tessdata\Viet74K.txt"; // sửa đường dẫn nếu khác
+            // Đường dẫn tới từ điển tiếng Việt
+            var dictionaryPath = Path.Combine(tessDataPath, "Viet74K.txt");
+            if (!System.IO.File.Exists(dictionaryPath))
+                throw new FileNotFoundException("Không tìm thấy từ điển tiếng Việt: " + dictionaryPath);
+
             var vietnameseWords = new HashSet<string>(
                 System.IO.File.ReadLines(dictionaryPath)
                     .Select(w => w.Trim().ToLower())
@@ -374,6 +381,7 @@ namespace EPIC01.Controllers
 
             return resultText.ToString();
         }
+
 
         // Hàm đánh giá điểm “có nghĩa” dựa vào từ điển
         private int ScoreMeaning(string text, HashSet<string> vietnameseWords)
