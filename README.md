@@ -25,19 +25,19 @@ Trước khi chạy, bạn cần cấu hình `appsettings.json`:
 
 ```json
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=EPIC01Db;Trusted_Connection=True;"
-  },
-  "OpenAI": {
-    "ApiKey": "your_openai_api_key_here"
-  },
   "Logging": {
     "LogLevel": {
       "Default": "Information",
       "Microsoft.AspNetCore": "Warning"
     }
   },
-  "AllowedHosts": "*"
+  "OpenAI": {
+    "ApiKey": "luumytran + Vũ Công Hân"
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=VUHAN14-01-2001;Database=EPIC1(CTIN);User Id=sa;Password=vuhan1401;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;"
+  }
 }
 ```
 
