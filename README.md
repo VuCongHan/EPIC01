@@ -48,7 +48,7 @@ Trước khi chạy, bạn cần cấu hình `appsettings.json`:
 ### Yêu cầu
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [LibreOffice](https://www.libreoffice.org/) (đã thêm vào biến môi trường)
+- [LibreOffice](https://www.libreoffice.org/)
 - Visual Studio 2022+ hoặc VS Code
 
 ### Clone và chạy
@@ -58,10 +58,6 @@ git clone https://github.com/VuCongHan/EPIC01.git
 cd EPIC01
 dotnet run
 ```
-
-Mặc định API chạy tại:
-- `https://localhost:5001`
-- `http://localhost:5000`
 
 ## 📂 Cấu trúc thư mục sau xử lý
 
@@ -103,15 +99,12 @@ Khi xử lý thành công, các file kết quả được lưu cùng cấp với
 
 Mở trình duyệt tại:
 
-```
-https://localhost:5001/swagger
-```
-
-Hoặc dùng Postman để gửi request đến các endpoint phía trên.
+Dùng Postman để gửi request đến các endpoint phía trên.
 
 ## 👤 Tác giả
 
 - **Vũ Công Hân** – [github.com/VuCongHan](https://github.com/VuCongHan)
+- **Lưu Mỹ Trân** – [github.com/TranLuu3001](https://github.com/TranLuu3001)
 
 ---
 
