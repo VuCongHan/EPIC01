@@ -16,85 +16,73 @@ namespace EPIC01.Data
 
         public async Task<string> GetTechnicalRequirements(string extractedText)
         {
-            //var requestBody = new
-            //{
-            //    model = "gpt-4o-mini",
-            //    messages = new[]
-            //    {
-            //        new
-            //        {
-            //            role = "system",
-            //            content = """
-            //                Bạn là một chuyên gia kỹ thuật. Nhiệm vụ của bạn là trích xuất các yêu cầu kỹ thuật
-
-            //                Yêu cầu:
-            //                - Trả về định dạng Markdown chuẩn như sau:
-
-            //                1. Chính (Trang X)
-            //                   - Chi tiết nếu có (Trang X)
-
-            //                - Ghi rõ số trang tại **cuối từng dòng**, bao gồm cả dòng chính và các dòng gạch đầu dòng (ví dụ: Trang 1, Trang 2...)
-
-            //                Tránh:
-            //                - Tuyệt đối không bịa ra thông tin hoặc thêm bất kỳ thông tin nào không có trong văn bản.
-            //                - Không liệt kê tuần tự 1-2-3… mà không nhóm lại.
-            //                - Không để lặp lại từ hoặc đoạn giống nhau giữa các nhóm.
-            //                """
-            //        },
-            //        new
-            //        {
-            //            role = "user",
-            //            content = $"""
-            //                Dưới đây là nội dung một tài liệu kỹ thuật, trong đó mỗi trang được đánh dấu bằng nhãn [PAGE n] (ví dụ: [PAGE 1], [PAGE 2], ...).
-
-            //                Yêu cầu bạn:
-            //                1. Trích xuất tất cả các **yêu cầu kỹ thuật** từ văn bản dưới đây.
-            //                2. Sử dụng cú pháp Markdown chuẩn.
-            //                3. Các yêu cầu kỹ thuật phải bao gồm số trang tại cuối mỗi yêu cầu.
-            //                4. Các yêu cầu kỹ thuật được liệt kê dưới dạng danh sách với được đánh số thứ tự (1, 2, 3, ...) và chi tiết với dấu gạch đầu dòng (-).
-
-            //                **Chỉ lấy các yêu cầu kỹ thuật. Loại bỏ mọi thông tin không liên quan và tuyệt đối không bịa ra thông tin hoặc thêm bất kỳ thông tin nào không có trong văn bản**
-
-            //                Nội dung văn bản như sau:
-            //                {extractedText}
-            //                """
-            //        }
-            //    },
-            //    temperature = 0.3,
-            //    max_tokens = 1000
-            //};
-
             var requestBody = new
             {
                 model = "gpt-4o-mini",
-                messages = new[]
-                {
-                    new {
-                     role = "system",
-                     content = @"Bạn là trợ lý AI chuyên xử lý các tài liệu kỹ thuật và hồ sơ mời thầu.
+                messages = new[] {
+                new {
+                    role = "system",
+                    content = @"
+                        Bạn là trợ lý AI chuyên xử lý các tài liệu kỹ thuật và hồ sơ mời thầu. 
                         Nhiệm vụ của bạn là **chỉ trích xuất chính xác các 'yêu cầu kỹ thuật' của gói thầu** từ tài liệu được cung cấp, **bao gồm cả trong bảng và văn bản mô tả**.
 
-                        - Chỉ tập trung vào các phần kỹ thuật như: thông số thiết bị, chức năng phần mềm, dịch vụ hỗ trợ kỹ thuật, bảo mật, bảo hành,...
-                        - Nếu tài liệu có bảng, chỉ trích xuất các cột/dòng có thông tin kỹ thuật và mô tả kỹ thuật, không lấy STT hoặc cột định danh.
-                        - Không liệt kê các thông tin như: địa điểm, thời gian, chủ đầu tư, vốn, mục tiêu, kiểm tra nghiệm thu, hoặc các nội dung hành chính khác.
-                        - Nếu có thông tin kỹ thuật chi tiết dưới từng thiết bị/phần mềm thì trình bày theo dạng:
-                            1. Tên thiết bị/phần mềm (Trang X)
-                                - Mô tả kỹ thuật 1 (Trang X)
-                                - Mô tả kỹ thuật 2 (Trang X)
-                        - Kết quả phải bắt đầu bằng tiêu đề: '## Yêu cầu kỹ thuật'
-                        - Ghi rõ số trang tại **cuối từng dòng** (ví dụ: Trang 1, Trang 2...)
+                        **Quy tắc trích xuất:**
+                        1. **Chỉ trích xuất các phần kỹ thuật** như:
+                           - Yêu cầu chung
+                           - Thông số thiết bị
+                           - Chức năng phần mềm
+                           - Năng lực của hệ thống / giải pháp
+                           - Môi trường cài đặt / triển khai
+                           - Giao diện quản trị
+                           - Tính năng
+                           - Tên hàng hóa / dịch vụ liên quan 
+                           - Dịch vụ hỗ trợ kỹ thuật
+                           - Bảo mật
+                           - Bảo hành
+                           - Yêu cầu khác
+                        2. **Không trích xuất** các thông tin không liên quan đến yêu cầu kỹ thuật, ví dụ:
+                           - Địa điểm
+                           - Thời gian
+                           - Chủ đầu tư
+                           - Vốn
+                           - Mục tiêu
+                           - Giải pháp và phương pháp luận
+                           - Quy định về kiểm tra, nghiệm thu sản phẩm
+                           - Các nội dung hành chính khác
 
-                        Chỉ trả về phần kỹ thuật, không giải thích thêm.
-                        **Nếu văn bản không có nghĩa trả về Lỗi không đọc được văn bản**
-                     "
-                    },
-                    new {
-                        role = "user",
-                        content = $"Dưới đây là nội dung một tài liệu kỹ thuật, trong đó mỗi trang được đánh dấu bằng nhãn [PAGE n] (ví dụ: [PAGE 1], [PAGE 2], ...): \n\n{extractedText}"
-                    }
+                        **Nếu tài liệu có bảng**:
+                        - **Chỉ trích xuất** các cột và dòng có thông tin kỹ thuật và mô tả kỹ thuật, không lấy cột STT hoặc các cột định danh.
+
+                        **Nếu có thông tin kỹ thuật chi tiết dưới từng thiết bị/phần mềm**:
+                        3. Trình bày như sau: (Nếu có nhiều phân cấp)
+                           1. Tên thiết bị/phần mềm (Trang X)  
+                                - Nhóm mô tả kỹ thuật 1: (Trang X)  
+                                    + Chi tiết kỹ thuật 1 (Trang X)  
+                                    + Chi tiết kỹ thuật 2 (Trang X)  
+                                - Nhóm mô tả kỹ thuật 2: (Trang X)   
+                                    + Chi tiết kỹ thuật ... (Trang X)
+   
+                        **Định dạng kết quả:**
+                        - Bắt đầu kết quả bằng tiêu đề: `## Yêu cầu kỹ thuật`
+                        - Trình bày kết quả theo **dạng danh sách phân cấp rõ ràng** như ví dụ bên trên, **tuyệt đối không trình bày dưới dạng bảng** (markdown table hoặc văn bản dạng bảng).
+                        - Với mỗi thông tin kỹ thuật, **ghi rõ số trang** tại cuối mỗi dòng (ví dụ: Trang 1, Trang 2,...)
+
+                        **Lưu ý quan trọng:**
+                        - Nếu không có thông tin kỹ thuật hoặc không thể đọc được văn bản, trả về: `Lỗi không đọc được văn bản`
+
+                        **Yêu cầu nghiêm ngặt:**
+                        - **Không được rút gọn, tóm tắt, hoặc tự ý bỏ thông tin kỹ thuật.**
+                        - **Không được suy diễn hoặc bịa thêm nội dung không có trong tài liệu.**
+                        - Chỉ sử dụng đúng các thông tin có trong văn bản đầu vào, giữ nguyên nghĩa gốc.
+                    "
                 },
-                temperature = 0.2,
-                max_tokens = 1000
+                new {
+                    role = "user",
+                    content = $"Dưới đây là nội dung một tài liệu kỹ thuật, trong đó mỗi trang được đánh dấu bằng nhãn [PAGE n] (ví dụ: [PAGE 1], [PAGE 2], ...): \n\n{extractedText}"
+                }
+            },
+            temperature = 0.2,
+                max_tokens = 2000
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");

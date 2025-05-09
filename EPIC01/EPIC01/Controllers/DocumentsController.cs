@@ -317,19 +317,20 @@ namespace EPIC01.Controllers
             if (!System.IO.File.Exists(pdfPath))
                 throw new FileNotFoundException("Không tìm thấy tệp PDF: " + pdfPath);
 
-            // Lấy thư mục gốc của ứng dụng đang chạy (relative path)
-            var baseDirectory = AppContext.BaseDirectory;
+            // Trở về thư mục gốc của project
+            string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
 
-            // Thư mục tessdata nằm trong thư mục "Uploads/tessdata" của dự án
-            string tessDataPath = Path.Combine(baseDirectory, "Uploads", "tessdata");
+            // Đường dẫn đến thư mục tessdata
+            string tessDataPath = Path.Combine(projectRoot, "Uploads", "tessdata");
             if (!Directory.Exists(tessDataPath))
                 throw new DirectoryNotFoundException("Không tìm thấy thư mục tessdata: " + tessDataPath);
 
-            // Đường dẫn tới từ điển tiếng Việt
-            var dictionaryPath = Path.Combine(tessDataPath, "Viet74K.txt");
+            // Đường dẫn đến từ điển tiếng Việt
+            string dictionaryPath = Path.Combine(tessDataPath, "Viet74K.txt");
             if (!System.IO.File.Exists(dictionaryPath))
                 throw new FileNotFoundException("Không tìm thấy từ điển tiếng Việt: " + dictionaryPath);
 
+            // Nạp từ điển
             var vietnameseWords = new HashSet<string>(
                 System.IO.File.ReadLines(dictionaryPath)
                     .Select(w => w.Trim().ToLower())
